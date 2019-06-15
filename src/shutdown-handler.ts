@@ -8,6 +8,6 @@ export const initShutdownHandler = (server: http.Server) => {
     setTimeout(() => process.exit(0), 10000);
   };
 
-  process.on("SIGINT", gracefulShutdown);
-  process.on("SIGTERM", gracefulShutdown);
+  process.once("SIGINT", gracefulShutdown);
+  process.once("SIGTERM", gracefulShutdown);
 };
