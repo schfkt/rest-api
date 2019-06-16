@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  opa:
+    image: openpolicyagent/opa:0.12.0
+    ports:
+      - 8181:8181
+    command:
+      - "run"
+      - "--server"
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - 5672:5672
+      - 8080:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: rest
+      RABBITMQ_DEFAULT_PASS: JRl98pdChHcV
+  rest-api:
+    build: .
+    ports:
+      - 1337:1337
