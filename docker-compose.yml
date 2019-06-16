@@ -8,6 +8,9 @@ services:
     command:
       - "run"
       - "--server"
+      - "/opt/opa"
+    volumes:
+      - ./data/opa:/opt/opa
   rabbitmq:
     image: rabbitmq:3-management
     ports:

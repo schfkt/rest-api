@@ -1,0 +1,13 @@
+{
+  "features": {
+    "makeFrappe": {
+      "description": "User is allowed to make frappe"
+    },
+    "makeFreddoEspresso": {
+      "description": "User is allowed to make freddo espresso"
+    },
+    "makeCappuccino": {
+      "description": "User is allowed to make cappuccino"
+    }
+  }
+}

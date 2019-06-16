@@ -1,0 +1,16 @@
+{
+  "users": {
+    "pavlos": {
+      "hasAccessToFeatures": [
+        "makeFreddoEspresso",
+        "makeFrappe",
+        "makeCappuccino"
+      ]
+    },
+    "doge": {
+      "hasAccessToFeatures": [
+        "makeFreddoEspresso"
+      ]
+    }
+  }
+}
