@@ -1,6 +1,7 @@
 {
   "users": {
     "pavlos": {
+      "licenseKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicGF2bG9zIiwiaWF0IjoxNTYwNzE5MzQ1fQ.bJxWJdVPZUbDx4DAmxQreHxcyUVjUSuHgaXsgGcv43I",
       "hasAccessToFeatures": [
         "makeFreddoEspresso",
         "makeFrappe",
@@ -8,9 +9,7 @@
       ]
     },
     "doge": {
-      "hasAccessToFeatures": [
-        "makeFreddoEspresso"
-      ]
+      "hasAccessToFeatures": []
     }
   }
 }

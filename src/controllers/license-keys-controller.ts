@@ -1,23 +1,28 @@
 import Koa from "koa";
 import * as oddlog from "oddlog";
+import {CreateLicenseKeyService} from "../services";
 
 export interface ILicenseKeysControllerDependencies {
   logger: oddlog.ILogger;
   context: Koa.Context;
+  createLicenseKeyService: CreateLicenseKeyService;
 }
 
 export class LicenseKeysController {
   private logger: oddlog.ILogger;
   private context: Koa.Context;
+  private createLicenseKeyService: CreateLicenseKeyService;
 
   constructor(dependencies: ILicenseKeysControllerDependencies) {
     this.logger = dependencies.logger;
     this.context = dependencies.context;
+    this.createLicenseKeyService = dependencies.createLicenseKeyService;
   }
 
   public async create() {
-    this.logger.info(`${this.constructor.name}#create called`);
-    this.context.body = {result: "ok"};
+    const {user} = this.context.body;
+    const licenseKey = await this.createLicenseKeyService.createKeyForUser(user);
+    this.context.body = {licenseKey};
   }
 
   public async update() {
