@@ -1,5 +1,6 @@
 import {AwilixContainer} from "awilix";
 import Koa from "koa";
+import bodyParser from "koa-bodyparser";
 
 import {initShutdownHandler} from "../shutdown-handler";
 import * as middleware from "./middleware";
@@ -12,6 +13,7 @@ export const createServer = (container: AwilixContainer) => {
   application.use(middleware.errorHandler());
   application.use(middleware.requestScopedContainer({container}));
   application.use(middleware.requestLogger());
+  application.use(bodyParser());
 
   const requestRouter = createRequestRouter({routes});
   application.use(requestRouter.routes());

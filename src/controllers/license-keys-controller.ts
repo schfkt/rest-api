@@ -20,8 +20,8 @@ export class LicenseKeysController {
   }
 
   public async create() {
-    const {user} = this.context.body;
-    const licenseKey = await this.createLicenseKeyService.createKeyForUser(user);
+    const {userId, features} = this.context.request.body;
+    const licenseKey = await this.createLicenseKeyService.createKeyForUser(userId, features);
     this.context.body = {licenseKey};
   }
 

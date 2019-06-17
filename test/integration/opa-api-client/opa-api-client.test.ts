@@ -3,7 +3,7 @@ import {expect} from "chai";
 import nock from "nock";
 import {config} from "../../../src/config";
 import {OpaApiClient} from "../../../src/opa-api-client";
-import {existingUserResponse, nonExistingUserResponse} from "./fixtures";
+import * as fixtures from "./fixtures";
 
 describe("OpaApiClient", () => {
   const opaConfig = config.opa;
@@ -24,7 +24,7 @@ describe("OpaApiClient", () => {
 
         nock(opaConfig.address)
           .get(`/${opaConfig.apiVersion}/data/users/${userId}`)
-          .reply(200, existingUserResponse);
+          .reply(200, fixtures.existingUserResponse);
 
         const existingUser = await opaApiClient.users.findByid(userId);
 
@@ -38,7 +38,7 @@ describe("OpaApiClient", () => {
 
         nock(opaConfig.address)
           .get(`/${opaConfig.apiVersion}/data/users/${userId}`)
-          .reply(200, nonExistingUserResponse);
+          .reply(200, fixtures.nonExistingUserResponse);
 
         const nonExistingUser = await opaApiClient.users.findByid(userId);
 
@@ -71,6 +71,30 @@ describe("OpaApiClient", () => {
 
         await opaApiClient.users.setLicenseKey(userId, payload);
       });
+    });
+  });
+
+  describe("FeatureResource", () => {
+    describe("#list", () => {
+      it("Returns the list of existing features", async () => {
+        nock(opaConfig.address)
+          .get(`/${opaConfig.apiVersion}/data/features`)
+          .reply(200, fixtures.nonEmptyListOfFeatures);
+
+        const features = await opaApiClient.features.list();
+
+        expect(features).to.have.keys("walkTheDog", "ruleTheEmpire");
+      });
+    });
+
+    it("Returns an empty list if there're no features", async () => {
+      nock(opaConfig.address)
+        .get(`/${opaConfig.apiVersion}/data/features`)
+        .reply(200, fixtures.emptyListOfFeatures);
+
+      const features = await opaApiClient.features.list();
+
+      expect(features).to.be.empty;
     });
   });
 });

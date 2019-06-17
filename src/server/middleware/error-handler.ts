@@ -1,5 +1,5 @@
 import Koa from "koa";
-import {ApplicationError} from "../../errors";
+import {BaseError} from "../../errors";
 
 const SHOW_STACKTRACE_ENVS = ["test", "development"];
 
@@ -21,7 +21,7 @@ export const errorHandler = (): Koa.Middleware => {
       ctx.status = err.status || 500;
 
       let body: IErrorBody;
-      if (err instanceof ApplicationError) {
+      if (err instanceof BaseError) {
         body = {
           message: err.message,
           code: err.code,

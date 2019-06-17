@@ -6,3 +6,16 @@ export const existingUserResponse = {
 };
 
 export const nonExistingUserResponse = {};
+
+export const nonEmptyListOfFeatures = {
+  result: {
+    walkTheDog: {
+      description: "Allows a user to walk The Dog",
+    },
+    ruleTheEmpire: {
+      description: "Allows a user to rule The Empire",
+    },
+  },
+};
+
+export const emptyListOfFeatures = {};

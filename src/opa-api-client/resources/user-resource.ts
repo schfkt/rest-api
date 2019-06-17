@@ -1,10 +1,6 @@
 import axios from "axios";
-import {IOpaConfig} from "../../config";
+import {BaseResource} from "./base-resource";
 import {IRawOpaResource} from "./types";
-
-export interface IUserResourceDependencies {
-  config: IOpaConfig;
-}
 
 export interface IUser {
   licenseKey?: string;
@@ -16,23 +12,15 @@ export interface ISetLicenseKeyPayload {
   features: string[];
 }
 
-export class UserResource {
-  private config: IOpaConfig;
-
-  constructor({config}: IUserResourceDependencies) {
-    this.config = config;
-  }
-
+export class UserResource extends BaseResource {
   public async findByid(userId: string): Promise<IUser | null> {
-    // TODO: handle http errors
-    // TODO: retries (async-retry lib)
-    const requestUrl = `${this.buildBaseUrl()}/data/users/${userId}`;
+    const requestUrl = this.buildRequestUrl(`data/users/${userId}`);
     const {data} = await axios.get<IRawOpaResource<IUser>>(requestUrl);
     return data.result || null;
   }
 
   public async setLicenseKey(userId: string, payload: ISetLicenseKeyPayload) {
-    const requestUrl = `${this.buildBaseUrl()}/data/users/${userId}`;
+    const requestUrl = this.buildRequestUrl(`data/users/${userId}`);
 
     const patchOperations = [
       {
@@ -48,9 +36,5 @@ export class UserResource {
     ];
 
     await axios.patch(requestUrl, patchOperations);
-  }
-
-  private buildBaseUrl(): string {
-    return `${this.config.address}/${this.config.apiVersion}`;
   }
 }

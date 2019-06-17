@@ -9,6 +9,7 @@ export const container = createContainer().register({
   LicenseKeysController: asClass(controllers.LicenseKeysController),
 
   createLicenseKeyService: asClass(services.CreateLicenseKeyService),
+  jwtService: asClass(services.JwtService).inject(() => ({config: config.jwt})),
 
   opaApiClient: asClass(OpaApiClient).inject(() => ({config: config.opa})),
 });

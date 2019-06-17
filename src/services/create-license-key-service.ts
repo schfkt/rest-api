@@ -1,32 +1,54 @@
+import {FeatureNotFoundError, UserHasLicenseKeyError, UserNotFoundError} from "../errors";
 import {OpaApiClient} from "../opa-api-client";
+import {JwtService} from "./jwt-service";
 
 export interface ICreateLicenseKeyServiceDependencies {
-  config: any; // TODO: fix
   opaApiClient: OpaApiClient;
+  jwtService: JwtService;
 }
 
 export class CreateLicenseKeyService {
-  // private config: any;
-  private opaApiClient: OpaApiClient; // TODO: implement it
+  private opaApiClient: OpaApiClient;
+  private jwtService: JwtService;
 
   constructor(dependencies: ICreateLicenseKeyServiceDependencies) {
-    // this.config = dependencies.config.jwt;
     this.opaApiClient = dependencies.opaApiClient;
+    this.jwtService = dependencies.jwtService;
   }
 
-  public async createKeyForUser(userId: string): Promise<string> {
-    // TODO: the logic is the following
-    // Check that user exists
-    // Create a JWT token for it
-    // Update OPA record for the user
-    // Return the key
-    // Emit a message
-    const user = await this.opaApiClient.users.findByid(userId);
-    if (user == null) {
-      // TODO: proper domain error
-      throw new Error("User doesn't exist");
+  // TODO: Pessimistick locking to avoid concurrency issues
+  public async createKeyForUser(userId: string, features: string[]): Promise<string> {
+    const user = await this.findUser(userId);
+    if (user.licenseKey != null) {
+      throw new UserHasLicenseKeyError("User already has a license key created", {userId});
     }
 
-    return user.licenseKey || "42";
+    await this.checkThatFeaturesExist(features);
+
+    const licenseKey = this.jwtService.sign({userId});
+    await this.opaApiClient.users.setLicenseKey(userId, {licenseKey, features});
+    // TODO: emit message to the queue
+
+    return licenseKey;
+  }
+
+  private async findUser(userId: string) {
+    const user = await this.opaApiClient.users.findByid(userId);
+    if (user == null) {
+      throw new UserNotFoundError("Cannot find user by id passed", {userId});
+    }
+
+    return user;
+  }
+
+  private async checkThatFeaturesExist(featuresToAdd: string[]) {
+    const existingFeatures = await this.opaApiClient.features.list();
+
+    const missingFeatures = featuresToAdd.filter((featureToAdd) => existingFeatures[featureToAdd] == null);
+    if (missingFeatures.length !== 0) {
+      throw new FeatureNotFoundError("Cannot find features specified", {
+        features: missingFeatures,
+      });
+    }
   }
 }
