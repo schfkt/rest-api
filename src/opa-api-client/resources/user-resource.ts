@@ -13,7 +13,7 @@ export interface ISetLicenseKeyPayload {
 }
 
 export class UserResource extends BaseResource {
-  public async findByid(userId: string): Promise<IUser | null> {
+  public async findById(userId: string): Promise<IUser | null> {
     const requestUrl = this.buildRequestUrl(`data/users/${userId}`);
     const {data} = await axios.get<IRawOpaResource<IUser>>(requestUrl);
     return data.result || null;

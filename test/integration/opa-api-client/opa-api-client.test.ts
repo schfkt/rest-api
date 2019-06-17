@@ -26,7 +26,7 @@ describe("OpaApiClient", () => {
           .get(`/${opaConfig.apiVersion}/data/users/${userId}`)
           .reply(200, fixtures.existingUserResponse);
 
-        const existingUser = await opaApiClient.users.findByid(userId);
+        const existingUser = await opaApiClient.users.findById(userId);
 
         expect(existingUser).to.exist;
         expect(existingUser).to.have.property("licenseKey");
@@ -40,7 +40,7 @@ describe("OpaApiClient", () => {
           .get(`/${opaConfig.apiVersion}/data/users/${userId}`)
           .reply(200, fixtures.nonExistingUserResponse);
 
-        const nonExistingUser = await opaApiClient.users.findByid(userId);
+        const nonExistingUser = await opaApiClient.users.findById(userId);
 
         expect(nonExistingUser).to.not.exist;
       });

@@ -33,7 +33,7 @@ export class CreateLicenseKeyService {
   }
 
   private async findUser(userId: string) {
-    const user = await this.opaApiClient.users.findByid(userId);
+    const user = await this.opaApiClient.users.findById(userId);
     if (user == null) {
       throw new UserNotFoundError("Cannot find user by id passed", {userId});
     }
