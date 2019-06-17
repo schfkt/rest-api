@@ -1,7 +1,8 @@
+import {IOpaConfig} from "../config";
 import {UserResource} from "./resources";
 
 export interface IOpaClientDependencies {
-  config: any; // todo: fix
+  config: IOpaConfig;
 }
 
 export class OpaApiClient {
