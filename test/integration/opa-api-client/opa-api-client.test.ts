@@ -1,3 +1,4 @@
+import casual from "casual";
 import {expect} from "chai";
 import nock from "nock";
 import {config} from "../../../src/config";
@@ -19,11 +20,13 @@ describe("OpaApiClient", () => {
   describe("UserResource", () => {
     describe("#findById", () => {
       it("Retrieves an existing user data from OPA service", async () => {
+        const userId = "catz";
+
         nock(opaConfig.address)
-          .get(`/${opaConfig.apiVersion}/data/users/catz`)
+          .get(`/${opaConfig.apiVersion}/data/users/${userId}`)
           .reply(200, existingUserResponse);
 
-        const existingUser = await opaApiClient.users.findByid("catz");
+        const existingUser = await opaApiClient.users.findByid(userId);
 
         expect(existingUser).to.exist;
         expect(existingUser).to.have.property("licenseKey");
@@ -31,13 +34,42 @@ describe("OpaApiClient", () => {
       });
 
       it("Returns null for a non existing user", async () => {
+        const userId = "cant-find-me";
+
         nock(opaConfig.address)
-          .get(`/${opaConfig.apiVersion}/data/users/cant-find-me`)
+          .get(`/${opaConfig.apiVersion}/data/users/${userId}`)
           .reply(200, nonExistingUserResponse);
 
-        const existingUser = await opaApiClient.users.findByid("cant-find-me");
+        const nonExistingUser = await opaApiClient.users.findByid(userId);
 
-        expect(existingUser).to.not.exist;
+        expect(nonExistingUser).to.not.exist;
+      });
+    });
+
+    describe("#setLicenseKey", () => {
+      it("Sets the license key and features for a specific user", async () => {
+        const userId = "fake-user-id";
+        const payload = {
+          licenseKey: casual.string,
+          features: ["makeFreddoEspresso"],
+        };
+
+        nock(opaConfig.address)
+          .patch(`/${opaConfig.apiVersion}/data/users/${userId}`, [
+            {
+              op: "add",
+              path: "/licenseKey",
+              value: payload.licenseKey,
+            },
+            {
+              op: "add",
+              path: "/hasAccessToFeatures",
+              value: payload.features,
+            },
+          ])
+          .reply(200, "");
+
+        await opaApiClient.users.setLicenseKey(userId, payload);
       });
     });
   });
