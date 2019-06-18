@@ -1,10 +1,9 @@
-FROM node:10.16.0-alpine as libs
+FROM node:10.16.0-alpine as build
 
-WORKDIR /opt/app
-COPY package.json .
-COPY yarn.lock .
-RUN yarn --prod && \
-    yarn cache clean
+WORKDIR /opt
+COPY . .
+RUN yarn
+RUN yarn build
 
 
 FROM node:10.16.0-alpine
@@ -14,8 +13,10 @@ ENV NODE_ENV=production
 CMD ["node", "build/api.js"]
 LABEL MAINTAINER="Pavel Ivanov <ivpavig@gmail.com>" VERSION="v1.0.0"
 
-RUN chown node:node /opt/app
-COPY --from=libs --chown=node:node /opt/app/node_modules node_modules
-COPY --chown=node:node . .
+COPY --from=build --chown=node:node /opt/package.json package.json
+COPY --from=build --chown=node:node /opt/build build
+
+RUN yarn --prod && \
+    yarn cache clean
 
 USER node

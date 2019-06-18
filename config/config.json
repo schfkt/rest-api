@@ -3,7 +3,7 @@
     "secret": "ffGD7yJPpAaF1gSrhuooEECiq6nb8acrbnFPtG8b"
   },
   "opa": {
-    "address": "http://localhost:8181",
+    "address": "http://opa:8181",
     "apiVersion": "v1"
   }
 }
