@@ -13,7 +13,8 @@ And then you can access it at http://localhost:1337
 At the moment, only the method to issue license key is implemented:
 
 ```
-curl --request POST \
+# request
+$ curl --request POST \
   --url http://localhost:1337/license-keys \
   --header 'content-type: application/json' \
   --data '{
@@ -21,6 +22,7 @@ curl --request POST \
 	"features": ["makeFrappe"]
 }'
 
+# response
 {
   "licenseKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkb2dlIiwiaWF0IjoxNTYwODQ4MTAyfQ.1txpI2oC-yEeFuGTj3l6VM-WGDbJ6CZhCMyohy3PBvs"
 }
