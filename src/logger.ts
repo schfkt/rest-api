@@ -1,5 +1,5 @@
 import * as oddlog from "oddlog";
 
 export const logger = oddlog.createLogger("api", {
-  transports: [{type: "stream", format: "simple"}],
+  transports: [{type: "stream"}],
 });

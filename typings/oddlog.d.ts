@@ -1,7 +1,7 @@
 declare module "oddlog" {
   interface ILoggerTransport {
     type: string;
-    format: string;
+    format?: string;
   }
 
   interface ILoggerOptions {

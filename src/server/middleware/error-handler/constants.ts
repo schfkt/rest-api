@@ -7,4 +7,5 @@ export const ERROR_TO_STATUS_CODE_MAP = new Map<any, number>([
   [errors.FeatureNotFoundError, 404],
   [errors.UserHasLicenseKeyError, 400],
   [errors.UserNotFoundError, 404],
+  [errors.NotImplementedError, 500],
 ]);

@@ -1,20 +1,17 @@
 import Koa from "koa";
-import * as oddlog from "oddlog";
+import {NotImplementedError} from "../errors";
 import {CreateLicenseKeyService} from "../services";
 
 export interface ILicenseKeysControllerDependencies {
-  logger: oddlog.ILogger;
   context: Koa.Context;
   createLicenseKeyService: CreateLicenseKeyService;
 }
 
 export class LicenseKeysController {
-  private logger: oddlog.ILogger;
   private context: Koa.Context;
   private createLicenseKeyService: CreateLicenseKeyService;
 
   constructor(dependencies: ILicenseKeysControllerDependencies) {
-    this.logger = dependencies.logger;
     this.context = dependencies.context;
     this.createLicenseKeyService = dependencies.createLicenseKeyService;
   }
@@ -26,12 +23,10 @@ export class LicenseKeysController {
   }
 
   public async update() {
-    this.logger.info(`${this.constructor.name}#update called`);
-    this.context.body = {result: "ok"};
+    throw new NotImplementedError(`${this.constructor.name}#update is not implemented`);
   }
 
   public async revoke() {
-    this.logger.info(`${this.constructor.name}#revoke called`);
-    this.context.body = {result: "ok"};
+    throw new NotImplementedError(`${this.constructor.name}#revoke is not implemented`);
   }
 }
